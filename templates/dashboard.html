@@ -2,12 +2,16 @@
 {% block title %}Dashboard - {% endblock %}
 
 {% block content %}
-<h1 class="mb-4"><i class="bi bi-journal-text"></i> My Records</h1>
+<h1 class="mb-4">My Records {% if session.username == 'admin' %}(Admin View - All Users){% endif %}</h1>
+
+<a href="{{ url_for('create') }}" class="btn btn-primary mb-3">
+    <i class="bi bi-plus-circle"></i> Create New Record
+</a>
 
 {% if records|length == 0 %}
 <div class="text-center py-5">
     <i class="bi bi-inbox display-1 text-muted"></i>
-    <p class="text-muted mt-3">No records yet. <a href="{{ url_for('create') }}">Create your first one!</a></p>
+    <p class="text-muted mt-3">No records found.</p>
 </div>
 {% else %}
 <div class="table-responsive">
@@ -17,6 +21,9 @@
                 <th>#</th>
                 <th>Title</th>
                 <th>Description</th>
+                {% if session.username == 'admin' %}
+                <th>Owner</th>
+                {% endif %}
                 <th class="text-end">Actions</th>
             </tr>
         </thead>
@@ -26,15 +33,22 @@
                 <td>{{ r['id'] }}</td>
                 <td><strong>{{ r['title'] }}</strong></td>
                 <td>{{ r['description'] }}</td>
+                {% if session.username == 'admin' %}
+                <td><span class="badge bg-info">{{ r['username'] }}</span></td>
+                {% endif %}
                 <td class="text-end">
+                    {% if session.username == 'admin' or r['user_id'] == session.user_id or r['username'] == 'You' %}
                     <a href="{{ url_for('update', record_id=r['id']) }}" class="btn btn-sm btn-outline-primary">
-                        <i class="bi bi-pencil"></i> Edit
+                        Edit
                     </a>
                     <a href="{{ url_for('delete', record_id=r['id']) }}" 
                        class="btn btn-sm btn-outline-danger"
                        onclick="return confirm('Delete this record?')">
-                        <i class="bi bi-trash"></i> Delete
+                        Delete
                     </a>
+                    {% else %}
+                    <small class="text-muted">No actions</small>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}
