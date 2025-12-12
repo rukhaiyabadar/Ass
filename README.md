@@ -6,7 +6,6 @@ Version 1: Highly vulnerable (full of classic mistakes)
 Version 2: Most critical flaws fixed (CSRF, IDOR, etc.)
 Version 3 (current): Only one intentional vulnerability remains – Stored XSS – plus visible default admin credentials, creating a realistic final attack scenario.
 
-Ideal for cybersecurity students, CTF challenges, penetration testing labs, or anyone learning secure web development.
 
 Features
 
